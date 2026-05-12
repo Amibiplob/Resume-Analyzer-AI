@@ -1,16 +1,18 @@
-import CtaSection from "@/components/home/CtaSection";
-import FaqSection from "@/components/home/FaqSection";
-import FeaturesSection from "@/components/home/FeaturesSection";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/home/HeroSection";
 import HowItWorksSection from "@/components/home/HowItWorksSection";
-import PricingSection from "@/components/home/PricingSection";
+import FeaturesSection from "@/components/home/FeaturesSection";
 import StatsSection from "@/components/home/StatsSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
+import PricingSection from "@/components/home/PricingSection";
+import FaqSection from "@/components/home/FaqSection";
+import CtaSection from "@/components/home/CtaSection";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <>
-      {/* <Navbar /> */}
+      <Navbar />
       <main>
         <HeroSection />
         <HowItWorksSection />
@@ -21,7 +23,7 @@ export default function Home() {
         <FaqSection />
         <CtaSection />
       </main>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }
