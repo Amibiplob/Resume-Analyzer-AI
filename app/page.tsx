@@ -1,3 +1,4 @@
+import FeaturesSection from "@/components/home/FeaturesSection";
 import HeroSection from "@/components/home/HeroSection";
 import HowItWorksSection from "@/components/home/HowItWorksSection";
 
@@ -7,7 +8,8 @@ export default function Home() {
       {/* <Navbar /> */}
       <main>
         <HeroSection />
-        <HowItWorksSection/>
+        <HowItWorksSection />
+        <FeaturesSection />
       </main>
       {/* <Footer /> */}
     </>
