@@ -22,7 +22,7 @@ export default function LoginPage() {
   const onSubmit = async (data: Form) => {
     const res = await signIn("credentials", { ...data, redirect: false })
     if (res?.error) toast.error("Invalid credentials")
-    else { toast.success("Logged in!"); router.push("/dashboard") }
+    else { toast.success("Logged in!"); router.push("/") }
   }
 
   const fillDemo = (role: "user" | "admin") => {
