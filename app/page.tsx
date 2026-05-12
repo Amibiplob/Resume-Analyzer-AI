@@ -1,3 +1,4 @@
+import CtaSection from "@/components/home/CtaSection";
 import FaqSection from "@/components/home/FaqSection";
 import FeaturesSection from "@/components/home/FeaturesSection";
 import HeroSection from "@/components/home/HeroSection";
@@ -18,6 +19,7 @@ export default function Home() {
         <TestimonialsSection />
         <PricingSection />
         <FaqSection />
+        <CtaSection />
       </main>
       {/* <Footer /> */}
     </>
