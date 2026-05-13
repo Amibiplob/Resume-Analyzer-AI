@@ -20,7 +20,8 @@ export async function POST(req: Request) {
   if (file && !resumeText) {
     const buffer = Buffer.from(await file.arrayBuffer());
     try {
-      const pdfParse = (await import("pdf-parse")).default;
+      const pdfModule = await import("pdf-parse");
+      const pdfParse = (pdfModule as any).default ?? pdfModule;
       resumeText = (await pdfParse(buffer)).text;
     } catch {
       resumeText = "";

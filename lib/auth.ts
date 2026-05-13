@@ -1,4 +1,3 @@
-// lib/auth.ts
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
@@ -26,10 +25,10 @@ export const authOptions: NextAuthOptions = {
         if (!valid) return null;
 
         return {
-          id: user._id.toString(), // ← must return id
+          id: user._id.toString(),
           name: user.name,
           email: user.email,
-          role: user.role, // ← must return role
+          role: user.role,
         };
       },
     }),
@@ -42,15 +41,15 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id; // ← push into JWT
-        token.role = user.role; // ← push into JWT
+        token.id = user.id;
+        token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id as string; // ← push into session
-        session.user.role = token.role as string; // ← push into session
+        session.user.id = token.id as string;
+        session.user.role = token.role as "user" | "admin";
       }
       return session;
     },
