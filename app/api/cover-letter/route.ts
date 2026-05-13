@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { generateCoverLetterGemini } from "@/lib/gemini";
 import { getDb } from "@/lib/db";
 
 export async function POST(req: Request) {
-  const session = await auth();
+  const session = await getServerSession(authOptions); // ← changed
   if (!session?.user)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 

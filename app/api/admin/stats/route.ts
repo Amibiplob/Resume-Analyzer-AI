@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 
 export async function GET() {
-  const session = await auth();
+  const session = await getServerSession(authOptions); // ← changed
   if ((session?.user as any)?.role !== "admin")
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
@@ -19,7 +20,6 @@ export async function GET() {
     .toArray();
   const avgScore = Math.round(scoreAgg[0]?.avg ?? 0);
 
-  // Last 7 days activity
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
   const daily = await db
     .collection("analyses")

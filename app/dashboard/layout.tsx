@@ -1,4 +1,5 @@
-import { auth } from "@/lib/auth";
+import { getServerSession } from "next-auth"; // ← changed
+import { authOptions } from "@/lib/auth"; // ← changed
 import { redirect } from "next/navigation";
 import DashboardSidebar from "@/components/layout/DashboardSidebar";
 
@@ -7,7 +8,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
+  const session = await getServerSession(authOptions); // ← changed
   if (!session) redirect("/login");
   return (
     <div className="flex min-h-screen">

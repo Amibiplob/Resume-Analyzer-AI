@@ -1,19 +1,20 @@
-import NextAuth from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 import { getDb } from "./db";
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
     CredentialsProvider({
+      name: "Credentials",
       credentials: {
-        email: { type: "email" },
-        password: { type: "password" },
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
@@ -37,22 +38,34 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) token.role = (user as any).role;
+      if (account?.provider === "google") {
+        // fetch role from DB for Google users
+        const db = await getDb();
+        const dbUser = await db
+          .collection("users")
+          .findOne({ email: token.email });
+        token.role = dbUser?.role || "user";
+        token.id = dbUser?._id?.toString();
+      }
       return token;
     },
     async session({ session, token }) {
-      if (session.user) (session.user as any).role = token.role;
+      if (session.user) {
+        (session.user as any).role = token.role;
+        (session.user as any).id = token.id || token.sub;
+      }
       return session;
     },
-    async signIn({ user, account }) {
+    async signIn({ user, account, profile }) {
       if (account?.provider === "google") {
         const db = await getDb();
         const existing = await db
           .collection("users")
           .findOne({ email: user.email });
         if (!existing) {
-          await db.collection("users").insertOne({
+          const result = await db.collection("users").insertOne({
             name: user.name,
             email: user.email,
             role: "user",
@@ -60,12 +73,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             avatar: user.image,
             createdAt: new Date(),
           });
+          (user as any).id = result.insertedId.toString();
+          (user as any).role = "user";
+        } else {
+          (user as any).id = existing._id.toString();
+          (user as any).role = existing.role;
         }
-        (user as any).role = existing?.role || "user";
       }
       return true;
     },
   },
   pages: { signIn: "/login" },
   session: { strategy: "jwt" },
-});
+  secret: process.env.NEXTAUTH_SECRET,
+};

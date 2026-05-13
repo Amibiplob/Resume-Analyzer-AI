@@ -1,10 +1,11 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { getDb } from "@/lib/db";
 import StatsCards from "@/components/dashboard/StatsCards";
 import ScoreTrendChart from "@/components/dashboard/ScoreTrendChart";
-import { auth } from "@/lib/auth";
-import { getDb } from "@/lib/db";
 
 export default async function DashboardPage() {
-  const session = await auth();
+  const session = await getServerSession(authOptions); // ← changed
   const db = await getDb();
   const userId = (session!.user as any).id;
 
