@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
 import { useState } from "react";
-
+import { Sun, Moon } from "lucide-react";
 export default function Navbar() {
   const { data: session } = useSession();
   const { theme, setTheme } = useTheme();
@@ -31,7 +31,7 @@ export default function Navbar() {
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className="text-sm border rounded px-2 py-1"
           >
-            {theme === "dark" ? "☀️" : "🌙"}
+            {theme === "dark" ? <Sun /> : <Moon />}
           </button>
           {session ? (
             <div className="relative">
