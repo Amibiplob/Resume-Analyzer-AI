@@ -29,7 +29,7 @@ export default function ScoreTrendChart({ data }: { data: Analysis[] }) {
           <Line
             type="monotone"
             dataKey="score"
-            stroke="hsl(var(--primary))"
+            stroke="var(--color-primary)"
             strokeWidth={2}
             dot={false}
           />

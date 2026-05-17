@@ -29,7 +29,29 @@ ${text}
 ${jobDescription ? `\nJob Description:\n${jobDescription}` : ""}`;
 
   const raw = await callGemini(prompt);
-  return JSON.parse(raw.replace(/```json|```/g, "").trim());
+  try {
+    return JSON.parse(raw.replace(/```json|```/g, "").trim());
+  } catch (err) {
+    console.error("Gemini JSON Error:", raw);
+
+    return {
+      atsScore: 0,
+      sectionScores: {
+        summary: 0,
+        skills: 0,
+        experience: 0,
+        education: 0,
+        formatting: 0,
+      },
+      keywords: {
+        found: [],
+        missing: [],
+      },
+      suggestions: ["AI response parsing failed"],
+      tone: "Mixed",
+      bulletStrength: 0,
+    };
+  }
 }
 
 export async function generateCoverLetterGemini(

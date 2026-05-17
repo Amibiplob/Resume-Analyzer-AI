@@ -20,9 +20,10 @@ async function getAnalysis(id: string): Promise<Analysis | null> {
 export default async function ResultsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const analysis = await getAnalysis(params.id);
+  const { id } = await params;
+  const analysis = await getAnalysis(id);
   if (!analysis) return <p className="p-8 text-center">Analysis not found.</p>;
 
   return (
