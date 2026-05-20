@@ -34,8 +34,12 @@ export default function DropZone() {
 
       const res = await axios.post("/api/analyze", fd);
       router.push(`/results/${res.data.id}`);
-    } catch {
-      toast.error("Analysis failed. Please try again.");
+    } catch (err: any) {
+      console.error(err);
+
+      toast.error(
+        err?.response?.data?.error || "Analysis failed. Please try again.",
+      );
     } finally {
       setLoading(false);
     }

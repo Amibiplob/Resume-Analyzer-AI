@@ -21,28 +21,56 @@ export async function POST(req: Request) {
     const isPublic = formData.get("isPublic") === "true";
 
     // =========================
-    // PDF Parsing
+    // PDF Parsing (pdf-parse-new)
     // =========================
     if (file && !resumeText) {
       try {
+        // validate file type
+        if (file.type !== "application/pdf") {
+          return NextResponse.json(
+            { error: "Only PDF files are allowed." },
+            { status: 400 },
+          );
+        }
+
+        // validate file size (5MB limit)
+        if (file.size > 5 * 1024 * 1024) {
+          return NextResponse.json(
+            { error: "PDF file too large (max 5MB)." },
+            { status: 400 },
+          );
+        }
+
+        // convert file -> buffer
         const buffer = Buffer.from(await file.arrayBuffer());
 
-        const pdfParseModule = await import("pdf-parse");
+        // import pdf-parse-new
+        const PdfParse = await import("pdf-parse-new");
 
-        // Works with your current package version
-        const pdfParse = (pdfParseModule as any).default || pdfParseModule;
+        // Smart parser (recommended by package)
+        const parser = new PdfParse.SmartPDFParser({
+          oversaturationFactor: 1.5,
+          enableFastPath: true,
+          enableCache: true,
+        });
 
-        const parsed = await pdfParse(buffer);
+        // parse PDF
+        const parsed = await parser.parse(buffer);
 
-        resumeText = parsed.text?.trim() || "";
+        // validate extracted text
+        if (!parsed.text?.trim()) {
+          return NextResponse.json(
+            { error: "PDF contains no readable text." },
+            { status: 400 },
+          );
+        }
+
+        resumeText = parsed.text.trim();
       } catch (err) {
         console.error("PDF Parse Error:", err);
 
         return NextResponse.json(
-          {
-            error:
-              "Failed to parse PDF file. Please upload a valid resume PDF.",
-          },
+          { error: "Failed to parse PDF file." },
           { status: 400 },
         );
       }
@@ -53,9 +81,7 @@ export async function POST(req: Request) {
     // =========================
     if (!resumeText || resumeText.trim().length < 20) {
       return NextResponse.json(
-        {
-          error: "No resume content found",
-        },
+        { error: "No resume content found" },
         { status: 400 },
       );
     }
@@ -70,20 +96,16 @@ export async function POST(req: Request) {
     try {
       if (isLoggedIn && process.env.GEMINI_API_KEY) {
         result = await analyzeResumeGemini(resumeText, jobDesc);
-
         result.aiMode = "gemini";
       } else {
         result = analyzeResume(resumeText, jobDesc);
-
         result.aiMode = "rule-based";
       }
     } catch (err) {
       console.error("Resume Analysis Error:", err);
 
       return NextResponse.json(
-        {
-          error: "Resume analysis failed",
-        },
+        { error: "Resume analysis failed" },
         { status: 500 },
       );
     }
@@ -96,16 +118,11 @@ export async function POST(req: Request) {
 
       const { insertedId } = await db.collection("analyses").insertOne({
         userId: isLoggedIn ? (session!.user as any).id : null,
-
         resumeText,
-
         jobDescription: jobDesc || null,
         jobTitle: jobTitle || null,
-
         isPublic,
-
         createdAt: new Date(),
-
         ...result,
       });
 
@@ -116,7 +133,6 @@ export async function POST(req: Request) {
     } catch (err) {
       console.error("Mongo Error:", err);
 
-      // Return analysis even if DB fails
       return NextResponse.json({
         id: "local-analysis",
         saved: false,
@@ -127,9 +143,7 @@ export async function POST(req: Request) {
     console.error("API Error:", err);
 
     return NextResponse.json(
-      {
-        error: "Internal server error",
-      },
+      { error: "Internal server error" },
       { status: 500 },
     );
   }
