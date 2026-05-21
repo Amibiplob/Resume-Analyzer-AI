@@ -9,8 +9,8 @@ export default function AnalyzePage() {
         <h1 className="text-3xl font-semibold mb-2">Analyze Your Resume</h1>
         <p className="text-muted-foreground mb-8">
           Upload a PDF or paste your resume text. Logged-in users get AI-powered
-          analysis (Gemini). Guests get instant rule-based analysis — no login
-          required.
+          analysis (OpenRouter AI). Guests get instant rule-based analysis — no
+          login required.
         </p>
         <DropZone />
       </main>

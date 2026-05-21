@@ -33,7 +33,7 @@ export default async function ResultsPage({
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-semibold">Resume Analysis Results</h1>
           <span className="text-xs bg-muted px-2 py-1 rounded">
-            {analysis.aiMode === "gemini" ? "AI-Powered" : "Rule-Based"}
+            {analysis.aiMode === "OpenRouter" ? "AI-Powered" : "Rule-Based"}
           </span>
         </div>
 

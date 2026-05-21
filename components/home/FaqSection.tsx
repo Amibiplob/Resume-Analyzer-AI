@@ -4,7 +4,7 @@ import { useState } from "react";
 const faqs = [
   {
     q: "Do I need to create an account?",
-    a: "No. Guests get instant rule-based analysis. Create a free account for Gemini AI-powered analysis and cover letter generation.",
+    a: "No. Guests get instant rule-based analysis. Create a free account for OpenRouter AI-powered analysis and cover letter generation.",
   },
   {
     q: "What is an ATS score?",
@@ -16,7 +16,7 @@ const faqs = [
   },
   {
     q: "What is the difference between rule-based and AI?",
-    a: "Rule-based uses keyword matching and formatting heuristics. Gemini AI uses a large language model for deeper contextual analysis.",
+    a: "Rule-based uses keyword matching and formatting heuristics. OpenRouter AI uses a large language model for deeper contextual analysis.",
   },
   {
     q: "Can I build a resume from scratch?",

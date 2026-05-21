@@ -30,7 +30,7 @@ export interface Analysis {
   tone: string;
   bulletStrength: number;
   isPublic: boolean;
-  aiMode: "rule-based" | "gemini";
+  aiMode: "rule-based" | "OpenRouter";
   createdAt: Date;
 }
 

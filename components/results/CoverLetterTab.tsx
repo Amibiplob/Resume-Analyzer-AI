@@ -46,7 +46,7 @@ export default function CoverLetterTab({
       setLetter(res.data.content);
       toast.success("Cover letter generated!");
     } catch {
-      toast.error("Failed. Check your Gemini API key.");
+      toast.error("Failed. Check your OpenRouter API key.");
     } finally {
       setLoading(false);
     }

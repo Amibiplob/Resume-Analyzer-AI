@@ -17,7 +17,7 @@ const plans = [
     name: "Pro",
     price: "$0",
     features: [
-      "Gemini AI analysis",
+      "OpenRouter AI analysis",
       "Cover letter generator",
       "Unlimited analyses",
       "Resume builder",

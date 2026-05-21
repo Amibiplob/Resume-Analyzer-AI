@@ -4,9 +4,8 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { analyzeResume } from "@/lib/analyzer";
-
-import { getDb } from "@/lib/db";
 import { analyzeResumeOpenRouter } from "@/lib/openrouter";
+import { getDb } from "@/lib/db";
 
 export async function POST(req: Request) {
   try {
@@ -97,7 +96,7 @@ export async function POST(req: Request) {
     try {
       if (isLoggedIn) {
         result = await analyzeResumeOpenRouter(resumeText, jobDesc);
-        result.aiMode = "gemini";
+        result.aiMode = "OpenRouter";
       } else {
         result = analyzeResume(resumeText, jobDesc);
         result.aiMode = "rule-based";

@@ -12,7 +12,7 @@ export default function AnalysisCard({ item }: { item: Analysis }) {
           ATS {item.atsScore}
         </span>
         <span className="text-xs text-muted-foreground">
-          {item.aiMode === "gemini" ? "AI" : "RB"}
+          {item.aiMode === "OpenRouter" ? "AI" : "RB"}
         </span>
       </div>
       <h3 className="font-medium text-sm flex-1">

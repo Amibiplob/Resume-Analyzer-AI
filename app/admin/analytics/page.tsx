@@ -27,7 +27,7 @@ export default function AdminAnalyticsPage() {
 
   const modeData = [
     { name: "Rule-based", value: 60 },
-    { name: "Gemini AI", value: 40 },
+    { name: "OpenRouter AI", value: 40 },
   ];
 
   return (

@@ -15,7 +15,7 @@ export default function AboutPage() {
         <div className="grid md:grid-cols-3 gap-4">
           {[
             ["Rule-Based", "Instant offline analysis, no account needed."],
-            ["Gemini AI", "Deeper AI analysis for logged-in users."],
+            ["OpenRouter AI", "Deeper AI analysis for logged-in users."],
             ["Resume Builder", "Create and download professional resumes."],
           ].map(([title, desc]) => (
             <div key={title} className="border rounded-lg p-4">
