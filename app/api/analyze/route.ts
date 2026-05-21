@@ -4,8 +4,9 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { analyzeResume } from "@/lib/analyzer";
-import { analyzeResumeGemini } from "@/lib/gemini";
+
 import { getDb } from "@/lib/db";
+import { analyzeResumeOpenRouter } from "@/lib/openrouter";
 
 export async function POST(req: Request) {
   try {
@@ -94,8 +95,8 @@ export async function POST(req: Request) {
     // AI Analysis
     // =========================
     try {
-      if (isLoggedIn && process.env.GEMINI_API_KEY) {
-        result = await analyzeResumeGemini(resumeText, jobDesc);
+      if (isLoggedIn) {
+        result = await analyzeResumeOpenRouter(resumeText, jobDesc);
         result.aiMode = "gemini";
       } else {
         result = analyzeResume(resumeText, jobDesc);

@@ -1,17 +1,26 @@
-const BASE =
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+const BASE = "https://openrouter.ai/api/v1/chat/completions";
+const MODEL = "openrouter/free"; // or any model you prefer
 
-async function callGemini(prompt: string): Promise<string> {
-  const res = await fetch(`${BASE}?key=${process.env.GEMINI_API_KEY}`, {
+async function callOpenRouter(prompt: string): Promise<string> {
+  const res = await fetch(BASE, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      "HTTP-Referer": process.env.NEXTAUTH_URL ?? "http://localhost:3000",
+    },
+    body: JSON.stringify({
+      model: MODEL,
+      messages: [{ role: "user", content: prompt }],
+    }),
   });
+
   const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+
+  return data.choices?.[0]?.message?.content ?? "";
 }
 
-export async function analyzeResumeGemini(
+export async function analyzeResumeOpenRouter(
   text: string,
   jobDescription?: string,
 ) {
@@ -28,12 +37,11 @@ Resume:
 ${text}
 ${jobDescription ? `\nJob Description:\n${jobDescription}` : ""}`;
 
-  const raw = await callGemini(prompt);
+  const raw = await callOpenRouter(prompt);
   try {
     return JSON.parse(raw.replace(/```json|```/g, "").trim());
   } catch (err) {
-    console.error("Gemini JSON Error:", raw);
-
+    console.error("OpenRouter JSON Error:", raw);
     return {
       atsScore: 0,
       sectionScores: {
@@ -43,10 +51,7 @@ ${jobDescription ? `\nJob Description:\n${jobDescription}` : ""}`;
         education: 0,
         formatting: 0,
       },
-      keywords: {
-        found: [],
-        missing: [],
-      },
+      keywords: { found: [], missing: [] },
       suggestions: ["AI response parsing failed"],
       tone: "Mixed",
       bulletStrength: 0,
@@ -54,7 +59,7 @@ ${jobDescription ? `\nJob Description:\n${jobDescription}` : ""}`;
   }
 }
 
-export async function generateCoverLetterGemini(
+export async function generateCoverLetterOpenRouter(
   resumeText: string,
   jobTitle: string,
   company: string,
@@ -64,5 +69,5 @@ export async function generateCoverLetterGemini(
 Under 300 words. No placeholders. Professional tone.
 Resume: ${resumeText}
 ${jobDescription ? `Job Description: ${jobDescription}` : ""}`;
-  return callGemini(prompt);
+  return callOpenRouter(prompt);
 }

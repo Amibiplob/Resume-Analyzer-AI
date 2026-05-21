@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { generateCoverLetterGemini } from "@/lib/gemini";
+
 import { getDb } from "@/lib/db";
+import { generateCoverLetterOpenRouter } from "@/lib/openrouter";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions); // ← changed
@@ -11,7 +12,7 @@ export async function POST(req: Request) {
 
   const { resumeText, jobTitle, company, jobDescription, analysisId } =
     await req.json();
-  const content = await generateCoverLetterGemini(
+  const content = await generateCoverLetterOpenRouter(
     resumeText,
     jobTitle,
     company,
