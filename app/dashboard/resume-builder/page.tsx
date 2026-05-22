@@ -5,33 +5,26 @@ import TemplateSelector from "@/components/resume-builder/TemplateSelector";
 import ResumeForm from "@/components/resume-builder/ResumeForm";
 import ResumePreview from "@/components/resume-builder/ResumePreview";
 import { EMPTY_RESUME, type ResumeData } from "@/lib/types";
+import { type Template } from "@/lib/templates";
 
 const steps = ["template", "form", "preview"] as const;
 
 export default function ResumeBuilderPage() {
-  const [template, setTemplate] = useState<
-    "modern" | "classic" | "minimal"
-  >("modern");
-
+  const [template, setTemplate] = useState<Template>("modern");
   const [data, setData] = useState<ResumeData>(EMPTY_RESUME);
-  const [step, setStep] =
-    useState<(typeof steps)[number]>("template");
+  const [step, setStep] = useState<(typeof steps)[number]>("template");
 
   return (
     <div className="space-y-6">
-      {/* header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">
-            Resume Builder
-          </h1>
+          <h1 className="text-2xl font-semibold">Resume Builder</h1>
           <p className="text-sm text-muted-foreground">
             Build your resume step by step
           </p>
         </div>
       </div>
 
-      {/* step indicator */}
       <div className="flex gap-2 text-sm">
         {steps.map((s) => (
           <button
@@ -48,7 +41,6 @@ export default function ResumeBuilderPage() {
         ))}
       </div>
 
-      {/* content */}
       <div className="rounded-xl border p-4">
         {step === "template" && (
           <TemplateSelector
@@ -59,7 +51,6 @@ export default function ResumeBuilderPage() {
             }}
           />
         )}
-
         {step === "form" && (
           <ResumeForm
             data={data}
@@ -67,7 +58,6 @@ export default function ResumeBuilderPage() {
             onNext={() => setStep("preview")}
           />
         )}
-
         {step === "preview" && (
           <ResumePreview
             data={data}
