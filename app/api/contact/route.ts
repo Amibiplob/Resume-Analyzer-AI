@@ -7,7 +7,6 @@ export async function POST(req: Request) {
 
     const { name, email, message } = body;
 
-    // Validation
     if (!name || !email || !message) {
       return NextResponse.json(
         { error: "All fields are required" },
@@ -36,6 +35,34 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       { error: "Something went wrong" },
+      { status: 500 },
+    );
+  }
+}
+
+/* ✅ ADD THIS */
+export async function GET() {
+  try {
+    const db = await getDb();
+
+    const contacts = await db
+      .collection("contacts")
+      .find({})
+      .sort({ createdAt: -1 })
+      .toArray();
+
+    return NextResponse.json(
+      {
+        success: true,
+        items: contacts,
+      },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error("Contact GET API Error:", error);
+
+    return NextResponse.json(
+      { error: "Failed to fetch contacts" },
       { status: 500 },
     );
   }
