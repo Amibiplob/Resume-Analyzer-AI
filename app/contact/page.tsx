@@ -2,13 +2,52 @@
 
 import { toast } from "sonner";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function ContactPage() {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast.success("Message sent! We'll get back to you soon.");
-    (e.target as HTMLFormElement).reset();
+  const [loading, setLoading] = useState(false);
+
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+
+  const form = e.currentTarget;
+
+  setLoading(true);
+
+  const formData = new FormData(form);
+
+  const data = {
+    name: formData.get("name"),
+    email: formData.get("email"),
+    message: formData.get("message"),
   };
+
+  try {
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      throw new Error(result.error || "Failed to send");
+    }
+
+    // reset first
+    form.reset();
+
+    // then toast
+    toast.success("Message sent successfully!");
+  } catch (error: any) {
+    toast.error(error.message || "Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors flex items-center justify-center px-4 py-20">
@@ -29,6 +68,7 @@ export default function ContactPage() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name */}
             <input
+              name="name"
               required
               placeholder="Your name"
               className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent px-4 py-3 text-sm text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition"
@@ -36,6 +76,7 @@ export default function ContactPage() {
 
             {/* Email */}
             <input
+              name="email"
               required
               type="email"
               placeholder="Email address"
@@ -44,6 +85,7 @@ export default function ContactPage() {
 
             {/* Message */}
             <textarea
+              name="message"
               required
               placeholder="Your message..."
               rows={6}
@@ -51,8 +93,11 @@ export default function ContactPage() {
             />
 
             {/* Button */}
-            <button className="w-full bg-black text-white dark:bg-white dark:text-black py-3 rounded-xl font-medium hover:bg-slate-800 dark:hover:bg-slate-200 transition">
-              Send Message
+            <button
+              disabled={loading}
+              className="w-full bg-black text-white dark:bg-white dark:text-black py-3 rounded-xl font-medium hover:bg-slate-800 dark:hover:bg-slate-200 transition disabled:opacity-50"
+            >
+              {loading ? "Sending..." : "Send Message"}
             </button>
           </form>
 
