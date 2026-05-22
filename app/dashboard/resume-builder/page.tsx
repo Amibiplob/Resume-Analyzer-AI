@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+
 import TemplateSelector from "@/components/resume-builder/TemplateSelector";
 import ResumeForm from "@/components/resume-builder/ResumeForm";
 import ResumePreview from "@/components/resume-builder/ResumePreview";
+
 import { EMPTY_RESUME, type ResumeData } from "@/lib/types";
 import { type Template } from "@/lib/templates";
 
@@ -12,6 +14,7 @@ const steps = ["template", "form", "preview"] as const;
 export default function ResumeBuilderPage() {
   const [template, setTemplate] = useState<Template>("modern");
   const [data, setData] = useState<ResumeData>(EMPTY_RESUME);
+
   const [step, setStep] = useState<(typeof steps)[number]>("template");
 
   return (
@@ -19,6 +22,7 @@ export default function ResumeBuilderPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold">Resume Builder</h1>
+
           <p className="text-sm text-muted-foreground">
             Build your resume step by step
           </p>
@@ -29,6 +33,7 @@ export default function ResumeBuilderPage() {
         {steps.map((s) => (
           <button
             key={s}
+            type="button"
             onClick={() => setStep(s)}
             className={`px-3 py-1 rounded-full border transition ${
               step === s
@@ -51,6 +56,7 @@ export default function ResumeBuilderPage() {
             }}
           />
         )}
+
         {step === "form" && (
           <ResumeForm
             data={data}
@@ -58,6 +64,7 @@ export default function ResumeBuilderPage() {
             onNext={() => setStep("preview")}
           />
         )}
+
         {step === "preview" && (
           <ResumePreview
             data={data}

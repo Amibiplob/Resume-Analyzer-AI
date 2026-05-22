@@ -24,8 +24,20 @@ export const templates = [
     name: "Creative",
     desc: "Colorful and modern, ideal for creative fields.",
   },
-  { id: "ats", name: "ATS", desc: "Optimized for applicant tracking systems." },
+  {
+    id: "ats",
+    name: "ATS",
+    desc: "Optimized for applicant tracking systems.",
+  },
 ] as const;
 
-// Global Template type
 export type Template = (typeof templates)[number]["id"];
+
+export const templateStyles: Record<Template, string> = {
+  modern: "font-sans",
+  classic: "font-serif",
+  minimal: "font-mono text-sm",
+  executive: "font-sans tracking-wide",
+  creative: "font-sans bg-gray-50",
+  ats: "font-sans text-sm",
+};
