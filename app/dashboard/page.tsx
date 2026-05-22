@@ -3,11 +3,11 @@ import { authOptions } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import StatsCards from "@/components/dashboard/StatsCards";
 import ScoreTrendChart from "@/components/dashboard/ScoreTrendChart";
+import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
-
-  if (!session) return null;
+  if (!session) redirect("/login");
 
   const db = await getDb();
   const userId = (session.user as any).id;
@@ -25,8 +25,7 @@ export default async function DashboardPage() {
   const avgScore =
     analyses.length > 0
       ? Math.round(
-          analyses.reduce((sum, a) => sum + a.atsScore, 0) /
-            analyses.length
+          analyses.reduce((sum, a) => sum + a.atsScore, 0) / analyses.length,
         )
       : 0;
 
@@ -44,9 +43,7 @@ export default async function DashboardPage() {
       <StatsCards total={total} avgScore={avgScore} />
 
       {/* chart */}
-      <ScoreTrendChart
-        data={JSON.parse(JSON.stringify(analyses))}
-      />
+      <ScoreTrendChart data={JSON.parse(JSON.stringify(analyses))} />
     </div>
   );
 }
