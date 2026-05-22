@@ -22,7 +22,6 @@ export default async function BlogDetailPage({
   if (!post) return <p className="p-8">Post not found.</p>;
   return (
     <>
-      <Navbar />
       <main className="max-w-2xl mx-auto px-4 py-10">
         <div className="flex gap-2 mb-4 flex-wrap">
           {post.tags.map((t: string) => (
@@ -39,7 +38,6 @@ export default async function BlogDetailPage({
           {post.content}
         </div>
       </main>
-      <Footer />
     </>
   );
 }
