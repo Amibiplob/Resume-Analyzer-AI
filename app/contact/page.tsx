@@ -23,7 +23,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   };
 
   try {
-    const res = await fetch("/api/contact", {
+    const res = await fetch("/api/contacts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
