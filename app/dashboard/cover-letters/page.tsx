@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { formatDate } from "@/lib/utils";
@@ -13,39 +14,62 @@ export default function CoverLettersPage() {
   }, []);
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-semibold">Cover Letters</h1>
+    <div className="space-y-4 ">
+      {/* Header */}
+      <div>
+        <h1 className="text-xl font-semibold">Cover Letters</h1>
+        <p className="text-sm text-muted-foreground">
+          Generated cover letters history
+        </p>
+      </div>
+
+      {/* Empty state */}
       {items.length === 0 && (
-        <p className="text-muted-foreground">No cover letters yet.</p>
+        <p className="text-sm text-muted-foreground">No cover letters yet.</p>
       )}
-      <div className="space-y-3">
-        {items.map((item) => (
-          <div key={String(item._id)} className="border rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">
-                  {item.jobTitle} — {item.company}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {formatDate(item.createdAt)}
-                </p>
-              </div>
+
+      {/* List */}
+      <div className="space-y-2">
+        {items.map((item) => {
+          const id = String(item._id);
+          const isOpen = open === id;
+
+          return (
+            <div key={id} className="border rounded-lg">
+              {/* Header row */}
               <button
-                onClick={() =>
-                  setOpen(open === String(item._id) ? null : String(item._id))
-                }
-                className="text-sm underline"
+                onClick={() => setOpen(isOpen ? null : id)}
+                className="w-full flex items-center justify-between px-4 py-3 text-left"
               >
-                {open === String(item._id) ? "Hide" : "View"}
+                <div>
+                  <p className="text-sm font-medium">
+                    {item.jobTitle}{" "}
+                    <span className="text-muted-foreground">
+                      — {item.company}
+                    </span>
+                  </p>
+
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    {formatDate(item.createdAt)}
+                  </p>
+                </div>
+
+                <span className="text-xs text-muted-foreground">
+                  {isOpen ? "Hide" : "View"}
+                </span>
               </button>
+
+              {/* Content */}
+              {isOpen && (
+                <div className="border-t px-4 py-3 bg-muted/30">
+                  <pre className="text-sm whitespace-pre-wrap leading-relaxed">
+                    {item.content}
+                  </pre>
+                </div>
+              )}
             </div>
-            {open === String(item._id) && (
-              <pre className="mt-3 text-sm whitespace-pre-wrap bg-muted p-3 rounded">
-                {item.content}
-              </pre>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
