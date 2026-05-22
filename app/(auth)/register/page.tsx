@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import Link from "next/link";
 import axios from "axios";
 import { signIn } from "next-auth/react";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 
 const schema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -19,7 +21,7 @@ type Form = z.infer<typeof schema>;
 
 export default function RegisterPage() {
   const router = useRouter();
-
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -102,12 +104,22 @@ export default function RegisterPage() {
                 Password
               </label>
 
-              <input
-                {...register("password")}
-                type="password"
-                placeholder="Minimum 6 characters"
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white px-4 py-3 outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition"
-              />
+              <div className="relative">
+                <input
+                  {...register("password")}
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Minimum 6 characters"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-3 flex items-center text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
 
               {errors.password && (
                 <p className="text-red-500 text-sm mt-2">
