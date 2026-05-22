@@ -69,7 +69,7 @@ export default function MyAnalysesPage() {
                 <td className="px-4 py-3">
                   <Link
                     href={`/results/${item._id}`}
-                    className="text-primary hover:underline text-xs"
+                    className="text-primary hover:underline"
                   >
                     View
                   </Link>
