@@ -11,9 +11,16 @@ export default async function DashboardLayout({
   const session = await getServerSession(authOptions); // ← changed
   if (!session) redirect("/login");
   return (
-    <div className="flex min-h-screen">
-      <DashboardSidebar user={session.user!} />
-      <main className="flex-1 p-6 overflow-auto">{children}</main>
+  <div className="min-h-screen">
+      {/* sidebar */}
+      <div className="fixed left-0 top-0 h-screen w-60 border-r bg-background">
+        <DashboardSidebar user={session.user!} />
+      </div>
+
+      {/* content */}
+      <main className="ml-60 h-screen overflow-auto p-6">
+        {children}
+      </main>
     </div>
   );
 }

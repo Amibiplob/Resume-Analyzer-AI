@@ -31,7 +31,7 @@ export default function MyAnalysesPage() {
       </div>
       {items.length === 0 && (
         <p className="text-muted-foreground">
-          No analyses yet.{" "}
+          No analyses yet.
           <Link href="/analyze" className="underline">
             Analyze your resume
           </Link>

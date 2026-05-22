@@ -62,14 +62,14 @@ export default function LoginPage() {
             </p>
 
             <p className="text-sm text-slate-600 dark:text-slate-400">
-              Email:{" "}
+              Email:
               <span className="font-medium text-slate-800 dark:text-white">
                 demo@email.com
               </span>
             </p>
 
             <p className="text-sm text-slate-600 dark:text-slate-400">
-              Password:{" "}
+              Password:
               <span className="font-medium text-slate-800 dark:text-white">
                 123456
               </span>
@@ -160,7 +160,7 @@ export default function LoginPage() {
 
           {/* Footer */}
           <p className="text-center text-sm text-slate-600 dark:text-slate-400 mt-8">
-            Don’t have an account?{" "}
+            Don’t have an account?
             <Link
               href="/register"
               className="font-semibold text-black dark:text-white hover:underline"

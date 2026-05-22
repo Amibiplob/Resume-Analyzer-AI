@@ -11,14 +11,14 @@ const links = [
   { href: "/admin/analyses", label: "Analyses" },
   { href: "/admin/blog", label: "Blog CMS" },
   { href: "/admin/analytics", label: "Analytics" },
-  { href: "/admin/contacts", label: "Contacts" }, // ✅ added
+  { href: "/admin/contacts", label: "Contacts" },
 ];
 
 export default function AdminSidebar() {
   const path = usePathname();
 
   return (
-    <aside className="w-60 border-r bg-background flex flex-col">
+    <aside className="w-60 border-r bg-background flex flex-col ">
       {/* header */}
       <div className="px-4 py-4 border-b">
         <p className="text-sm font-semibold tracking-tight">Admin Panel</p>
@@ -49,7 +49,7 @@ export default function AdminSidebar() {
       </nav>
 
       {/* footer */}
-      <div className="border-t p-2 space-y-1">
+      <div className="flex-1 border-t p-2 space-y-1">
         <Link
           href="/dashboard"
           className="block rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted"

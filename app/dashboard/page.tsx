@@ -5,9 +5,12 @@ import StatsCards from "@/components/dashboard/StatsCards";
 import ScoreTrendChart from "@/components/dashboard/ScoreTrendChart";
 
 export default async function DashboardPage() {
-  const session = await getServerSession(authOptions); // ← changed
+  const session = await getServerSession(authOptions);
+
+  if (!session) return null;
+
   const db = await getDb();
-  const userId = (session!.user as any).id;
+  const userId = (session.user as any).id;
 
   const [total, analyses] = await Promise.all([
     db.collection("analyses").countDocuments({ userId }),
@@ -18,15 +21,32 @@ export default async function DashboardPage() {
       .limit(30)
       .toArray(),
   ]);
-  const avgScore = analyses.length
-    ? Math.round(analyses.reduce((s, a) => s + a.atsScore, 0) / analyses.length)
-    : 0;
+
+  const avgScore =
+    analyses.length > 0
+      ? Math.round(
+          analyses.reduce((sum, a) => sum + a.atsScore, 0) /
+            analyses.length
+        )
+      : 0;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Dashboard</h1>
+      {/* header */}
+      <div>
+        <h1 className="text-2xl font-semibold">Dashboard</h1>
+        <p className="text-sm text-muted-foreground">
+          Track your resume performance over time
+        </p>
+      </div>
+
+      {/* stats */}
       <StatsCards total={total} avgScore={avgScore} />
-      <ScoreTrendChart data={JSON.parse(JSON.stringify(analyses))} />
+
+      {/* chart */}
+      <ScoreTrendChart
+        data={JSON.parse(JSON.stringify(analyses))}
+      />
     </div>
   );
 }
