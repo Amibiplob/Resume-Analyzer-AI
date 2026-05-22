@@ -8,12 +8,18 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions); // ← changed
-  if ((session?.user as any)?.role !== "admin") redirect("/dashboard");
+  const session = await getServerSession(authOptions);
+
+  const role = (session?.user as any)?.role;
+
+  if (role !== "admin") {
+    redirect("/dashboard");
+  }
+
   return (
     <div className="flex min-h-screen">
       <AdminSidebar />
-      <main className="flex-1 p-6 overflow-auto">{children}</main>
+      <main className="flex-1 overflow-auto p-6">{children}</main>
     </div>
   );
 }
