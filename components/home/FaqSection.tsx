@@ -26,25 +26,57 @@ const faqs = [
 
 export default function FaqSection() {
   const [open, setOpen] = useState<number | null>(null);
+
   return (
-    <section className="py-16">
-      <div className="max-w-2xl mx-auto px-4">
-        <h2 className="text-2xl font-semibold text-center mb-8">
-          Frequently Asked Questions
-        </h2>
-        <div className="space-y-2">
+    <section className="py-10 bg-slate-50 dark:bg-slate-950 transition-colors">
+      <div className="max-w-3xl mx-auto px-4">
+        {/* Heading */}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
+            Frequently Asked Questions
+          </h2>
+
+          <p className="mt-3 text-slate-600 dark:text-slate-400 text-sm">
+            Everything you need to know about ResumeAI.
+          </p>
+        </div>
+
+        {/* FAQ Items */}
+        <div className="space-y-4">
           {faqs.map((f, i) => (
-            <div key={i} className="border rounded-lg overflow-hidden">
+            <div
+              key={i}
+              className="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition"
+            >
               <button
                 onClick={() => setOpen(open === i ? null : i)}
-                className="w-full text-left px-4 py-3 text-sm font-medium flex justify-between items-center hover:bg-muted"
+                className="w-full flex items-center justify-between px-5 py-4 text-left"
               >
-                {f.q}
-                <span>{open === i ? "−" : "+"}</span>
+                <span className="font-medium text-slate-900 dark:text-white text-sm md:text-base">
+                  {f.q}
+                </span>
+
+                <span
+                  className={`text-xl transition-transform duration-300 text-slate-500 dark:text-slate-400 ${
+                    open === i ? "rotate-45" : ""
+                  }`}
+                >
+                  +
+                </span>
               </button>
-              {open === i && (
-                <p className="px-4 pb-4 text-sm text-muted-foreground">{f.a}</p>
-              )}
+
+              <div
+                className={`px-5 overflow-hidden transition-all duration-300 ${
+                  open === i ? "max-h-40 pb-5 opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
+                <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                  {f.a}
+                </p>
+              </div>
+
+              {/* hover glow */}
+              <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-gradient-to-b from-transparent via-transparent to-slate-100/40 dark:to-slate-800/30 rounded-2xl" />
             </div>
           ))}
         </div>

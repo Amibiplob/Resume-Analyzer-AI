@@ -1,5 +1,3 @@
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/home/HeroSection";
 import HowItWorksSection from "@/components/home/HowItWorksSection";
 import FeaturesSection from "@/components/home/FeaturesSection";
@@ -11,19 +9,15 @@ import CtaSection from "@/components/home/CtaSection";
 
 export default function HomePage() {
   return (
-    <>
-      <Navbar />
-      <main>
-        <HeroSection />
-        <HowItWorksSection />
-        <FeaturesSection />
-        <StatsSection />
-        <TestimonialsSection />
-        <PricingSection />
-        <FaqSection />
-        <CtaSection />
-      </main>
-      <Footer />
-    </>
+    <main>
+      <HeroSection />
+      <HowItWorksSection />
+      <FeaturesSection />
+      <StatsSection />
+      <TestimonialsSection />
+      <PricingSection />
+      <FaqSection />
+      <CtaSection />
+    </main>
   );
 }

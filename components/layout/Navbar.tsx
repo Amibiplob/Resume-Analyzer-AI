@@ -17,6 +17,7 @@ export default function Navbar() {
   const isAdmin = (session?.user as any)?.role === "admin";
 
   const navLinks = [
+    { href: "/", label: "Home" },
     { href: "/analyze", label: "Analyze" },
     { href: "/explore", label: "Explore" },
     { href: "/blog", label: "Blog" },
