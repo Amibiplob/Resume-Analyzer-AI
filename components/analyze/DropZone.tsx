@@ -26,8 +26,10 @@ export default function DropZone() {
     setLoading(true);
     try {
       const fd = new FormData();
+
       if (file) fd.append("file", file);
       else fd.append("text", data.text || "");
+
       fd.append("jobDescription", data.jobDescription || "");
       fd.append("jobTitle", data.jobTitle || "");
       fd.append("isPublic", data.isPublic ? "true" : "false");
@@ -35,76 +37,95 @@ export default function DropZone() {
       const res = await axios.post("/api/analyze", fd);
       router.push(`/results/${res.data.id}`);
     } catch (err: any) {
-      console.error(err);
-
-      toast.error(
-        err?.response?.data?.error || "Analysis failed. Please try again.",
-      );
+      toast.error(err?.response?.data?.error || "Analysis failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      {/* UPLOAD CARD */}
       <div
         {...getRootProps()}
-        className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${isDragActive ? "border-primary bg-primary/5" : "hover:border-primary/50"}`}
+        className={`
+          relative rounded-3xl border border-dashed p-10 text-center cursor-pointer transition
+          bg-white dark:bg-slate-900
+          hover:shadow-lg
+          ${isDragActive ? "border-black dark:border-white scale-[1.01]" : "border-slate-300 dark:border-slate-700"}
+        `}
       >
         <input {...getInputProps()} />
-        {file ? (
-          <p className="text-sm font-medium">📄 {file.name}</p>
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            {isDragActive
-              ? "Drop it here"
-              : "Drag & drop PDF, or click to browse"}
+
+        <div className="space-y-3">
+          <div className="text-4xl">📄</div>
+
+          {file ? (
+            <p className="text-sm font-medium text-slate-900 dark:text-white">
+              {file.name}
+            </p>
+          ) : (
+            <p className="text-sm text-slate-600 dark:text-slate-400">
+              {isDragActive
+                ? "Drop your resume here"
+                : "Drag & drop your PDF resume here"}
+            </p>
+          )}
+
+          <p className="text-xs text-slate-500 dark:text-slate-500">
+            or click to browse files
           </p>
-        )}
-      </div>
-
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center">
-          <span className="bg-background px-2 text-xs text-muted-foreground">
-            or paste text
-          </span>
         </div>
       </div>
 
-      <textarea
-        {...register("text")}
-        rows={6}
-        placeholder="Paste your resume text here..."
-        className="w-full border rounded px-3 py-2 text-sm resize-none"
-      />
+      {/* OR DIVIDER */}
+      <div className="flex items-center gap-4">
+        <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+        <span className="text-xs text-slate-500">OR paste text</span>
+        <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+      </div>
 
-      <input
-        {...register("jobTitle")}
-        placeholder="Target job title (optional)"
-        className="w-full border rounded px-3 py-2 text-sm"
-      />
-      <textarea
-        {...register("jobDescription")}
-        rows={3}
-        placeholder="Paste job description for keyword matching (optional)"
-        className="w-full border rounded px-3 py-2 text-sm resize-none"
-      />
+      {/* TEXT INPUT CARD */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-4">
+        <textarea
+          {...register("text")}
+          rows={6}
+          placeholder="Paste your resume text here..."
+          className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent px-4 py-3 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-black dark:focus:ring-white outline-none"
+        />
 
-      <div className="flex items-center gap-2 text-sm">
-        <input type="checkbox" {...register("isPublic")} id="public" />
-        <label htmlFor="public">
-          Make this analysis public on Explore page
+        <input
+          {...register("jobTitle")}
+          placeholder="Target job title (optional)"
+          className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent px-4 py-3 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-black dark:focus:ring-white outline-none"
+        />
+
+        <textarea
+          {...register("jobDescription")}
+          rows={3}
+          placeholder="Paste job description (optional)"
+          className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent px-4 py-3 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-black dark:focus:ring-white outline-none"
+        />
+
+        {/* CHECKBOX */}
+        <label className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+          <input type="checkbox" {...register("isPublic")} />
+          Make this analysis public
         </label>
       </div>
 
+      {/* CTA BUTTON */}
       <button
         disabled={loading}
-        className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-medium disabled:opacity-50"
+        className="
+          w-full rounded-2xl py-4 font-medium transition
+          bg-black text-white
+          dark:bg-white dark:text-black
+          hover:scale-[1.01] hover:shadow-lg
+          disabled:opacity-50
+        "
       >
-        {loading ? "Analyzing..." : "Analyze Resume"}
+        {loading ? "Analyzing Resume..." : "Analyze Resume"}
       </button>
     </form>
   );
